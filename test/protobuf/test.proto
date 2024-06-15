@@ -1,0 +1,57 @@
+syntax = "proto3"; //proto版本号
+
+package fixbug;
+
+//生成service服务类和rpc方法描述
+option cc_generic_services = true;
+
+message ResultCode
+{
+    int32 errcode = 1;
+    bytes errmsg = 2;
+}
+//定义请求消息类型
+message LoginRequest
+{
+    bytes name = 1;
+    bytes pwd = 2;
+    map<int32, bytes> test = 3;
+}
+
+//定义响应消息类型
+message LoginResponse
+{
+    ResultCode resultcode = 1;
+    bool success = 2;
+}
+
+
+message User
+{
+    bytes name = 1;
+    uint32 age = 2;
+    enum Sex
+    {
+        MAN = 0;
+        WOMAN = 1;
+    }
+    Sex sex = 3;
+}
+
+message GetUsersListRequest
+{
+    uint32 id = 1;
+}
+
+message GetUsersListResponse
+{
+    ResultCode resultcode = 1;
+    repeated User users = 2; //定义列表类型 
+}
+
+//定义描述rpc方法的类型 service
+service UserServiceRpc
+{
+    rpc Login(LoginRequest) returns (LoginResponse);
+    rpc GetUsers(GetUsersListRequest) returns (GetUsersListResponse);
+}
